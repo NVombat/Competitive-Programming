@@ -1,8 +1,8 @@
-/*Its been a few days since Charsi is acting weird. And finally you(his best friend) came to know that its because his
-proposal has been rejected.
+/*David has been acting weird for a few days. You finally come to know that its because his proposal has been rejected.
 
-He is trying hard to solve this problem but because of the rejection thing he can't really focus. Can you help him? The
-question is: Given a number n , find if n can be represented as the sum of 2 desperate numbers (not necessarily different) , where desperate numbers are those which can be written in the form of (a*(a+1))/2 where a > 0 .
+He is trying hard to solve a problem but because of the rejection he can't really focus. Can you help him? The
+question is: Given a number n , find if n can be represented as the sum of 2 desperate numbers (not necessarily different),
+where desperate numbers are those which can be written in the form of (a*(a+1))/2 where a > 0 .
 
 Input :
 

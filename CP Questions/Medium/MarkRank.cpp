@@ -1,12 +1,9 @@
-/*They declared Sonam as bewafa . Although she is not, believe me! She asked a number of queries to people regrading
-their position in a test. Now its your duty to remove her bewafa tag by answering simple queries.
-
-All the students who give test can score from 1 to 10^18. Lower the marks , better the Rank. Now instead of directly
+/*All the students who give test can score from 1 to 10^18. Lower the marks , better the Rank. Now instead of directly
 telling the marks of student they have been assigned groups where marks are distributed in continuous intervals, you
 have been given l(i) lowest mark of interval i and r(i) highest marks in interval i. So marks distribution in that 
 interval is given as l(i), l(i)+1, l(i)+2 . . . r(i).
 
-Now Sonam ask queries in which she gives rank of the student (x) and you have to tell marks obtained by that student.
+Now Hermoine ask queries in which she gives rank of the student (x) and you have to tell marks obtained by that student.
 Note: rank1 is better than rank2 and rank2 is better than rank3 and so on and the first interval starts from 1.
 
 Input:
@@ -19,7 +16,7 @@ x, denoting rank of student.
 
 
 Output:
-For each query output marks obtain by student whose rank is x(1<=x<=10^18).
+For each query output marks obtained by student whose rank is x(1<=x<=10^18).
 
 
 Constraints:

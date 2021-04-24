@@ -1,6 +1,6 @@
 /*You are given n triangles.
 
-You are required to find how many triangles are unique out of given triangles. For each triangle you are given three
+You are required to find how many triangles are unique out of the given triangles. For each triangle you are given three
 integers a,b,c , the sides of a triangle.
 A triangle is said to be unique if there is no other triangle with same set of sides.
 Note : It is always possible to form triangle with given sides.
