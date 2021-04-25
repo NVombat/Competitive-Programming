@@ -22,7 +22,6 @@ for (int i = 0; i < len; i++) {
     print(nums[i]);
 }
  
-
 Example 1:
 
 Input: nums = [1,1,2]
