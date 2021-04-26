@@ -79,7 +79,7 @@ int reverse_trap(int arr[], int n, int max_ind)
 int main()
 {
     //Height array for elevation map and size of array
-    int height[] = {0,1,0,2,1,0,1,3,2,1,2,1}; //{0,1,0,2,1,0,1,3,2,1,2,1,3,2,1,2,1,3,2,1,2,1,3,2,1,2,1}; //{6,9,9}; //{7,4,0,9}; //{3,0,0,2,0,4}; //{4,2,0,3,2,5};
+    int height[] = {0,1,0,2,1,0,1,3,2,1,2,1}; //{0,1,0,2,1,0,1,3,2,1,2,1,3,2,1,2,1,3,2,1,2,1,3,2,1,2,1}; //{6,9,9}; //{7,4,0,9}; //{3,0,0,2,0,4}; //{4,2,0,3,2,5}; //{1,8,6,2,5,4,8,3,7};
     int s = sizeof(height)/sizeof(height[0]);
 
     //Finds the maximum height and the number of occurrences
