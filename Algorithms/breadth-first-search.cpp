@@ -49,7 +49,7 @@ int main()
             break;
 
         case 3:
-            cout << "Enter Node You Want To Start DFS From: " << endl;
+            cout << "Enter Node You Want To Start BFS From: " << endl;
             cin >> start;
             bfs(graph, start, n);
             break;
