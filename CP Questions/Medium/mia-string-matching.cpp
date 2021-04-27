@@ -58,3 +58,59 @@ OUTPUT
 5
 0
 */
+
+//CODE:
+#include <iostream>
+using namespace std;
+
+//Match Function checks how closely two words are related
+int match(string s1, string s2)
+{
+  //m = the value of closeness
+  int m = 0;
+  //String lengths
+  int l1 = s1.length();
+  int l2 = s2.length();
+  
+  if(l1>=l2)
+  {
+    //To run only till the length of the shorter string
+    for(int i=0; i<l2; i++)
+    {
+      //If the characters of both strings match
+      if(s1[i]==s2[i])
+        //increment closeness
+        m++;
+    }
+  }
+  else
+  {
+    //Run for the shorter string length
+    for(int i=0; i<l1; i++)
+    {
+      //If characters of both strings match 
+      if(s1[i]==s2[i])
+        //Increment closeness
+        m++;
+    }
+  }
+  //Return closeness
+  return m;
+}
+
+int main() 
+{
+  //Scan number of testcases
+  int t;
+  cin >> t;
+  for(int i=0; i<t; i++)
+  {
+    //Scan strings
+    string s1, s2;
+    cin >> s1 >> s2;
+     
+    //Call match function on strings 
+    cout << match(s1, s2) << endl;
+  }
+  return 0;
+}
