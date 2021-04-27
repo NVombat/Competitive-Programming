@@ -127,7 +127,8 @@ void bfs(vector<int> graph[], int curr_node, int end_node, int n)
     //Current node has been visited
     visited[curr_node] = true;
 
-    //Recon array keeps track of parent of node "i" so we can reconstruct path
+    //Recon array keeps track of node that comes after node "i" so we can reconstruct path
+    //Recon[i] == j ----> i comes after j
     //Initially array set to NULL
     int recon[n] = {0};
 
