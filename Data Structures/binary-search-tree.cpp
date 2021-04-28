@@ -2,6 +2,17 @@
 #define SPACE 10
 using namespace std;
 
+//Struct for creating a tree node
+/*struct tnode
+{
+    //Has data and pointers to two child nodes
+    int data;
+    struct tnode* left;
+    struct tnode* right;
+};
+//Create the root node and set it to NULL
+struct tnode* root = NULL;*/
+
 //Node class
 class node
 {
@@ -293,6 +304,20 @@ public:
         }
     }
 
+    //Calculates Height of Tree
+    int tree_height(node *n)
+    {
+        //If node is null then return -1
+        if(n==NULL)
+            return -1;
+        //If the node is a leaf node then height is 0 (leaf nodes have height of 0)
+        if(isLeaf(n))
+            return 0;
+        //Return the height of the longer sub-tree and add one as the root node counts as level 0
+        //The height of any sub-tree is the height of its longer sub-tree + 1
+        return(max(tree_height(n->left), tree_height(n->right)) + 1);
+    }
+
     //Calculates Number of leaf nodes in the tree
     int leafNodeCount(node *n)
     {
@@ -305,6 +330,35 @@ public:
         //Recursively find the leaf nodes in the left and right branches of the BST
         else
             return (leafNodeCount(n->left) + leafNodeCount(n->right));
+    }
+
+    //Checks if a particular node is a leaf node or not
+    bool isLeaf(node *n)
+    {
+        //If the node has no children then it is a leaf node
+        //If left and right pointers are NULL
+        if(n->left==NULL and n->right==NULL)
+            return true;
+        else
+            return false;
+    }
+
+    //Calculates the sum of all leaf nodes and returns the sum recursively
+    int leafSum(node *n)
+    {
+        //If the node is NULL return 0 as there is no sum
+        if(n==NULL)
+            return 0;
+        //If the node is a leaf node then return the value of that node
+        if(isLeaf(n))
+            return n->data;
+        //Else recursively call the leaf sum function on total for the left and right pointers of each node
+        int sum = 0;
+        sum += leafSum(n->left);
+        sum += leafSum(n->right);
+
+        //Return the sum
+        return sum;
     }
 
     //Prints values of nodes on each level from left to right recursively
@@ -408,7 +462,8 @@ int main()
         cout << "4. Printing and Traversal of BST" << endl;
         cout << "5. Height Of Tree" << endl;
         cout << "6. Number Of Leaf Nodes" << endl;
-        cout << "7. Clear Screen" << endl;
+        cout << "7. Sum Of All Leaf Nodes" << endl;
+        cout << "8. Clear Screen" << endl;
         cout << "0. EXIT" << endl;
 
         //Scan option and create a new node dynamically in the heap memory
@@ -486,14 +541,20 @@ int main()
         case 5:
             cout << "Tree Height" << endl;
             cout << "Height of tree is: " << obj.height(obj.root) << endl;
+            cout << "Height of tree is: " << obj.tree_height(obj.root) << endl;
             break;
 
         case 6:
-            cout << "Number of Leaf Nodes" << endl;
+            cout << "Number of Leaf Nodes: " << endl;
             cout << obj.leafNodeCount(obj.root) << endl;
             break;
 
         case 7:
+            cout << "Sum of All Leaf Nodes: " << endl;
+            cout << obj.leafSum(obj.root) << endl;
+            break;
+
+        case 8:
             system("cls");
             break;
 

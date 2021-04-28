@@ -1,4 +1,5 @@
-/*A guy named Vasya attends the final grade of a high school. One day Vasya decided to watch a match of his favorite
+/*Codeforces - 69A
+A guy named Vasya attends the final grade of a high school. One day Vasya decided to watch a match of his favorite
 hockey team. And, as the boy loves hockey very much, even more than physics, he forgot to do the homework. Specifically,
 he forgot to complete his physics tasks. Next day the teacher got very angry at Vasya and decided to teach him a lesson.
 He gave the lazy student a seemingly easy task: You are given an idle body in space and the forces that affect it.
