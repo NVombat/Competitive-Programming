@@ -2,22 +2,11 @@
 #define SPACE 10
 using namespace std;
 
-//Struct for creating a tree node
-/*struct tnode
-{
-    //Has data and pointers to two child nodes
-    int data;
-    struct tnode* left;
-    struct tnode* right;
-};
-//Create the root node and set it to NULL
-struct tnode* root = NULL;*/
-
 //Node class
 class node
 {
 public:
-    //Data and pointers to left and right node
+    //Data and pointers to left and right child nodes
     int data;
     node *left;
     node *right;
@@ -39,15 +28,15 @@ public:
     }
 };
 
-//Binary Search Tree Class
-class BST
+//AVL Tree Class
+class AVL
 {
 public:
     //Root Node
     node *root;
 
     //Default constructor sets root node to NULL as tree is empty initially
-    BST()
+    AVL()
     {
         root = NULL;
     }
@@ -62,77 +51,20 @@ public:
             return false;
     }
 
-    //Inserts node in respective position based on value
-    void insertNode(node *new_node)
-    {
-        //If tree is empty then new node becomes the root node
-        if(isEmpty())
-        {
-            root = new_node;
-            cout << "Node inserted as root node" << endl;
-        }
-        else
-        {
-            //Traverse tree till the end using temp node -> temp represents the current node
-            node* temp = root;
-            while(temp!=NULL)
-            {
-                //If new node data is the same as temp node data then return -> no duplicates
-                if(new_node->data == temp->data)
-                {
-                   cout << "Value already exists, Insert another node" << endl;
-                   return;
-                }
-
-                //If new node is smaller then temp and temp is a leaf node
-                else if((new_node->data < temp->data) && (temp->left == NULL))
-                {
-                    //Append new node on the left of temp
-                    temp->left = new_node;
-                    cout << "Node inserted to the left" << endl;
-                    break;
-                }
-
-                //If new node is smaller then temp and temp is not a leaf node
-                else if(new_node->data < temp->data)
-                {
-                    //Traverse to the next left node
-                    temp = temp->left;
-                }
-
-                //If new node is larger then temp and temp is a leaf node
-                else if((new_node->data > temp->data) && (temp->right == NULL))
-                {
-                    //Append new node on the right of temp
-                    temp->right = new_node;
-                    cout << "Node inserted to the right" << endl;
-                    break;
-                }
-
-                //If new node is larger then temp and temp is a not leaf node
-                else
-                {
-                    //Traverse to the next right node
-                    temp = temp->right;
-                }
-            }
-        }
-    }
-
     //Recursively inserts a node into the tree -> new_node
     node* recursiveInsert(node *n, node *new_node)
     {
-        //If the node is NULL then insert new node and return it
+        //If the node is NULL then insert new node and return new node
         if(n==NULL)
         {
             n = new_node;
             return n;
         }
 
-        //If new node is smaller than the node - recursively insert the new node to the left of the root node
+        //If new node is smaller than the node - recursively insert the new node to the left of the node
         if(new_node->data<n->data)
             n->left = recursiveInsert(n->left, new_node);
-        //If new node is greater than the node - recursively insert the new node to the right of the root node
+        //If new node is greater than the node - recursively insert the new node to the right of the node
         else if(new_node->data>n->data)
             n->right = recursiveInsert(n->right, new_node);
         //Duplicate nodes arent allowed so if new node == the node then print error
@@ -142,7 +74,36 @@ public:
             return n;
         }
 
-        //Return the inserted node
+        //After inserting the node -> Check the balance factor of that node to see if its balanced
+        int bf = getBalanceFactor(n);
+
+        //If balance factor is greater than 1 and and new node is smaller than parent node -> Left-Left Imbalance
+        if(bf>1 && new_node->data < n->left->data)
+            //Right rotation fixes the balance factor
+            return rightRotate(n);
+
+        //If balance factor is less than -1 and and new node is greater than parent node -> Right-Right Imbalance
+        if(bf<-1 && new_node->data > n->right->data)
+            //Left rotation fixes the balance factor
+            return leftRotate(n);
+
+        //If balance factor is greater than 1 and and new node is greater than parent node -> Left-Right Imbalance
+        if(bf>1 && new_node->data > n->left->data)
+        {
+            //Two rotations are need to correct the balance factor -> one left rotation first and then a right rotation
+            n->left = leftRotate(n->left);
+            return rightRotate(n);
+        }
+
+        //If balance factor is less than -1 and and new node is smaller than parent node -> Right-Left Imbalance
+        if(bf<-1 && new_node->data < n->right->data)
+        {
+            //Two rotations are need to correct the balance factor -> one right rotation first and then a left rotation
+            n->right = rightRotate(n->right);
+            return leftRotate(n);
+        }
+
+        //Return the node that was corrected
         return n;
     }
 
@@ -150,8 +111,8 @@ public:
     node* recursiveSearch(node *n, int val)
     {
         //If root -> or any successive nodes after that are NULL it means that we have searched till the leaf for that particular node
-        //And that node is not present in the tree -> Hence "NOT FOUND" and then return NULL
-        //Or if the node is equal to the val we are looking for then return node as the node was found in tree
+        //And that node is not present in the tree -> Hence "NOT FOUND" -> return NULL
+        //Or if the node is equal to the val we are looking for then return node as the node has been found
         if(n==NULL or n->data==val)
         {
             return n;
@@ -165,55 +126,22 @@ public:
             recursiveSearch(n->right, val);
     }
 
-    //Uses Loops for search -> not recursion
-    node* iterativeSearch(int val)
-    {
-        //Check is root node is NULL -> tree is empty
-        if(root==NULL)
-            return root;
-        else
-        {
-            //Traverse Tree till the end or till we find the node we are looking for
-            node *temp = root;
-            while(temp!=NULL)
-            {
-                //If node has value we are looking for then return node
-                if(val==temp->data)
-                    return temp;
-                //If val is smaller then go to the left child
-                else if(val<temp->data)
-                    temp = temp->left;
-                //If val is larger then go to right child
-                else
-                    temp = temp->right;
-            }
-            //Return null if node is not there in BST
-            return NULL;
-        }
-    }
-
-    //Deleted node with data 'val' from BST
+    //Deleted node with data 'val' from AVL Tree
     node* deleteNode(node *n, int val)
     {
         //If node is NULL then return NULL
         if(n==NULL)
-        {
-            return n;
-        }
+            return NULL;
 
         //If value to be deleted is smaller than root
         else if(val < n->data)
-        {
             //Traverse Left Subtree recursively till we reach node to be deleted
             n->left = deleteNode(n->left, val);
-        }
 
         //If value to be deleted is larger than root
         else if(val > n->data)
-        {
             //Traverse right subtree recursively till we reach node to be deleted
             n->right = deleteNode(n->right, val);
-        }
 
         //When we reach the node -> AT NODE TO BE DELETED
         else
@@ -259,6 +187,37 @@ public:
                 n->left = deleteNode(n->left, temp->value)*/
             }
         }
+
+        //After deleting the node -> Check the balance factor of that node to see if its balanced
+        int bf = getBalanceFactor(n);
+
+        //If balance factor of current node is 2 and the left sub-tree has a balance factor greater than 0
+        if(bf==2 && getBalanceFactor(n->left) >= 0)
+            //Right rotation fixes the balance factor
+            return rightRotate(n);
+
+        //If balance factor of current node is 2 and the left sub-tree has a balance factor of -1
+        else if(bf==2 && getBalanceFactor(n->left)==-1)
+        {
+            //Two rotations are need to correct the balance factor -> one left rotation first and then a right rotation
+            n->left = leftRotate(n->left);
+            return rightRotate(n);
+        }
+
+        //If balance factor of current node is -2 and the right sub-tree has a balance factor smaller than 0
+        else if(bf==-2 && getBalanceFactor(n->right) <= 0)
+            //Left rotation fixes the balance factor
+            return leftRotate(root);
+
+        //If balance factor of current node is -2 and the left sub-tree has a balance factor of 1
+        else if(bf==-2 && getBalanceFactor((n->right)) == 1)
+        {
+            //Two rotations are need to correct the balance factor -> one right rotation first and then a left rotation
+            n->right = rightRotate(n->right);
+            return leftRotate(n);
+        }
+
+        //Return node
         return n;
     }
 
@@ -293,25 +252,6 @@ public:
         }
         //Returns maxValueNode in the particular Tree(from wherever it was called in the particular delete function)
         return currptr;
-    }
-
-    //Calculates Height of Tree
-    int height(node *n)
-    {
-        //If node is null then return -1
-        if(n==NULL)
-            return -1;
-        else
-        {
-            //Calculates height of left and right branches of tree
-            int left_height = height(n->left);
-            int right_height = height(n->right);
-            //Then returns longest branch with max edges
-            if(left_height>right_height)
-                return (left_height+1);
-            else
-                return (right_height+1);
-        }
     }
 
     //Calculates Height of Tree
@@ -371,6 +311,44 @@ public:
         return sum;
     }
 
+    //Calculates Balance Factor of a particular node
+    //Tree is balanced if its Balance factor is either -1, 0 or 1
+    int getBalanceFactor(node *n)
+    {
+        //If tree has no nodes then its Balance Factor is -1
+        if(n==NULL)
+            return -1;
+        //Balance factor is the difference between height of left subtree and height of right subtree
+        else
+            return (tree_height(n->left)-tree_height(n->right));
+    }
+
+    //FOR AVL TREE RIGHT ROTATION
+    //Performs the right rotate on node y
+    node* rightRotate(node *y)
+    {
+        //Balances the tree by performing the rotation
+        node *x = y->left;
+        node *z = x->right;
+
+        x->right = y;
+        y->left = z;
+        return x;
+    }
+
+    //FOR AVL TREE LEFT ROTATION
+    //Performs the left rotate on node x
+    node* leftRotate(node *x)
+    {
+        //Balances the tree by performing the rotation
+        node *y = x->right;
+        node *z = y->left;
+
+        y->left = x;
+        x->right = z;
+        return y;
+    }
+
     //Prints values of nodes on each level from left to right recursively
     void printGivenLevel(node *n, int level)
     {
@@ -392,7 +370,7 @@ public:
     void printLevelOrder(node *n)
     {
         //Calculates height of tree
-        int h = height(n);
+        int h = tree_height(n);
 
         //Runs for each level and prints each level one by one
         for(int i=0; i<=h; i++)
@@ -459,7 +437,7 @@ public:
 int main()
 {
     //Create Binary Search Tree Object
-    BST obj;
+    AVL obj;
     int option, val;
 
     do
@@ -469,7 +447,7 @@ int main()
         cout << "1. Insert Node" << endl;
         cout << "2. Search Node" << endl;
         cout << "3. Delete Node" << endl;
-        cout << "4. Printing and Traversal of BST" << endl;
+        cout << "4. Printing and Traversal of AVL Tree" << endl;
         cout << "5. Height Of Tree" << endl;
         cout << "6. Number Of Leaf Nodes" << endl;
         cout << "7. Sum Of All Leaf Nodes" << endl;
@@ -488,32 +466,18 @@ int main()
 
         case 1:
             cout << "Insert Operation" << endl;
-            cout << "Enter value of node to be inserted into BST" << endl;
+            cout << "Enter value of node to be inserted into AVL Tree" << endl;
             cin >> val;
             new_node->data = val;
             //Recursive Insert:
             obj.root = obj.recursiveInsert(obj.root, new_node);
-            //Iterative Insert:
-            //obj.insertNode(new_node);
             cout << endl;
             break;
 
         case 2:
             cout << "Search Operation" << endl;
-            cout << "Enter value of node to search in BST" << endl;
+            cout << "Enter value of node to search in AVL Tree" << endl;
             cin >> val;
-            //For Iterative Search
-            /*new_node = obj.iterativeSearch(val);
-            if(new_node!=NULL)
-            {
-                cout << new_node->data << endl;
-                cout << "Value Found" << endl;
-            }
-            else
-            {
-                cout << "Value not Found" << endl;
-            }*/
-            //For Recursive Search
             new_node = obj.recursiveSearch(obj.root, val);
             if(new_node!=NULL)
                 cout << "Node Found in Tree" << endl;
@@ -525,16 +489,14 @@ int main()
             cout << "Delete Operation" << endl;
             cout << "Enter node data to be deleted: " << endl;
             cin >> val;
-            new_node = obj.iterativeSearch(val);
+            new_node = obj.recursiveSearch(obj.root, val);
             if(new_node!=NULL)
             {
-                obj.deleteNode(obj.root, val);
+                obj.root = obj.deleteNode(obj.root, val);
                 cout << "Node Deleted" << endl;
             }
             else
-            {
-                cout << "Node not found in BST -> Enter another node to be deleted" << endl;
-            }
+                cout << "Node not found in AVL Tree -> Enter another node to be deleted" << endl;
             break;
 
         case 4:
@@ -557,7 +519,6 @@ int main()
 
         case 5:
             cout << "Tree Height" << endl;
-            cout << "Height of tree is: " << obj.height(obj.root) << endl;
             cout << "Height of tree is: " << obj.tree_height(obj.root) << endl;
             break;
 
