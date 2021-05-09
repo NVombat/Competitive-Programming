@@ -112,3 +112,84 @@ int main()
   }
   return 0;
 }
+
+
+//ALTERNATE SOLUTION 
+//CODE
+
+#include <iostream>
+#include <cstring>
+using namespace std;
+
+//function to swap two integers by reference using a temporary variable
+void swap(int *x,int *y)
+{
+  int temp;
+  temp = *x;
+  *x = *y;
+  *y = temp;
+}
+
+//bubble sorts a character array in descending order
+void sort(char arr[], int n)
+{
+  for(int i=0;i<n;i++)
+    for(int j=i+1;j<n;j++)
+  {
+      if(arr[i]<arr[j])
+        swap(arr[i],arr[j]);
+  }
+}
+
+//takes a character array and rearranges it so that the last element of the array is odd
+void evenise(char arr[],int n)
+{
+  //i=n-2 because index starts from 0 and the function is only called when the last element is ODD, so we start 
+  //from the (n-2)th element in the array 
+  for(int i=n-2;i>=0;i--)
+    //if element at index n-1 is odd, swap with element at index i
+    if(arr[n-1]%2 !=0)
+    {
+      swap(arr[n-1],arr[i]);   
+    }
+}
+
+int main() 
+{
+  int i,j,test;
+  cin>>test;
+ 
+  char num[10];
+  for(i=0;i<test;i++)
+  {
+    
+    cin>>num;
+
+    //stores the length of the character array
+    int l = int(strlen(num));
+    
+    sort(num,l);
+
+    int count=0;
+
+   //loop to check if each element is even
+   for(int k=0;k<l;k++)
+    {   
+     if(num[k]%2 != 0)
+       count++;
+    }
+
+    //if the last element is odd, evenise it
+    if(count!=l)
+      evenise(num,l);
+
+    //print final array
+    for(j=0;j<l;j++)
+    {   
+      cout<<num[j];
+    }
+    
+    cout<<endl;
+  }
+	return 0;
+}
